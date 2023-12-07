@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { ethers } from "ethers";
 // import atm_abi from "../artifacts/contracts/Assessment.sol/Assessment.json";
 import atm_abi from "./abi.json";
+import { Toaster, toast } from "sonner";
 
 export default function HomePage() {
   const [ethWallet, setEthWallet] = useState(undefined);
@@ -65,6 +66,7 @@ export default function HomePage() {
   const getAge = async () => {
     if (atm) {
       setAge((await atm.getAge()).toNumber());
+      toast.success("Profile Name updated.");
     }
   }
 
@@ -73,11 +75,15 @@ export default function HomePage() {
     if (atm) {
       console.log(await atm.getName());
       setName((await atm?.getName()));
+      toast.success("Profile Name updated.");
     }
   }
 
   const addAge = async (_age) => {
     if (atm) {
+      toast.info("Updating age", {
+        duration: 5000
+      });
       let tx = await atm.setAge(_age);
       await tx.wait()
       getAge();
@@ -86,6 +92,9 @@ export default function HomePage() {
 
   const addName = async (_name) => {
     if (atm) {
+      toast.info("Updating name. Kindly hold on", {
+        duration: 5000
+      });
       let tx = await atm.setName(_name);
       await tx.wait()
       fetchName();
@@ -305,22 +314,24 @@ export default function HomePage() {
   useEffect(() => { getWallet(); }, []);
 
   return (
-    <main className="container">
-      <nav className="navbar">
-        <h1 className="text-3xl font-bold">Profile Creator</h1>
-        <div className="connection-status">
-          {
-            account?.length > 0 ?
-              <div>
-                Connected - {""}
-                <span>{account && shortenAddress(account[0])}</span>
-              </div>
-              : <div>Not Connected</div>
-          }
-        </div>
-      </nav>
-      {initUser()}
-      <style jsx>{`
+    <>
+      <Toaster position="top-right" />
+      <main className="container">
+        <nav className="navbar">
+          <h1 className="text-3xl font-bold">Profile Creator</h1>
+          <div className="connection-status">
+            {
+              account?.length > 0 ?
+                <div>
+                  Connected - {""}
+                  <span>{account && shortenAddress(account[0])}</span>
+                </div>
+                : <div>Not Connected</div>
+            }
+          </div>
+        </nav>
+        {initUser()}
+        <style jsx>{`
         * {
           font-family: system-ui;
           box-sizing: border-box;
@@ -346,8 +357,15 @@ export default function HomePage() {
           top: 0;
           right: 16px;
         }
+        .alert {
+          position: absolute;
+          top: 80px;
+          right: 40px;
+          background: 
+        }
       `}
-      </style>
-    </main>
+        </style>
+      </main>
+    </>
   )
 }

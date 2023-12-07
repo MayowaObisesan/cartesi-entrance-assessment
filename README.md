@@ -9,7 +9,11 @@ The dapp is a single page dapp that ensures that a user have connected a wallet 
 
 The dapp can be further enhanced but all the major functionality listed above works very well.
 
-## Running the Dapp
+## Vercel Link
+
+<https://cartesi-entrance-assessment.vercel.app/>
+
+### Running the Dapp Locally
 
 To run this dapp, open the project directory and run the following from a terminal:
 
